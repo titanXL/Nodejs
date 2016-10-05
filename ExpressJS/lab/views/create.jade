@@ -1,0 +1,16 @@
+extends Layout
+
+block content
+  h1 Create TODO
+  ul.errors
+    if errors
+      each error, i in errors
+        li.alert.alert-danger #{error.msg}
+  form(method='post', action='/create')
+    .form-group
+      Label Title
+      input.form-control(name='title', type='text', placeholder='Enter title')
+    .form-group
+      Label Description
+      input.form-control(name='description', type='textarea', placeholder='Enter Description')  
+    input.btn.btn-default(name='submit', type='submit', value='Add')  

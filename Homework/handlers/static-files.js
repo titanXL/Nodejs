@@ -1,6 +1,7 @@
 let fs = require('fs')
 let url = require('url')
 let path = require('path')
+let http = require('http')
 function getContentType (url) {
   let contentType = ''
   if (url.endsWith('.css')) {
@@ -18,7 +19,8 @@ function getContentType (url) {
 
 module.exports = (req, res) => {
   req.pathname = req.pathname || url.parse(req.url).pathname
-  console.log(req.pathname)
+  console.log(req.headers.host)
+  console.log(process.env.PWD)
   if (req.pathname.startsWith('/content')) {
     fs.readFile('.' + req.pathname, (err, data) => {
       if (err) {
@@ -37,7 +39,15 @@ module.exports = (req, res) => {
       res.writeHead(200, {
         'Content-Type': contentType
       })
+      let filename = url.parse(req.url).pathname.split('/')[2]
+      let fullFilename = filename + '.' + url.parse(req.url).pathname.split('.')[1]
+      let file = fs.createWriteStream(fullFilename)
+      let p = 'http://' + req.headers.host + req.pathname
+      console.log(p)
       res.write(data)
+      fs.writeFile(fullFilename, data, 'ascii', (err) => {
+        if (err) console.log(err)
+      })
       res.end()
     })
   } else {

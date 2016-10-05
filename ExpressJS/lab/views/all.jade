@@ -1,0 +1,7 @@
+extends Layout
+
+block content
+  ul.list-group.todoList
+    each todo, i in todoList
+      li.list-group-item
+        a(href='details/#{todo.id}') #{todo.title}

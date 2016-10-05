@@ -7,15 +7,15 @@
 </head>
 
 <body>
-    <form method="POST" action="/input">
+    <form method="POST" enctype="multipart/form-data">
         Name:<br>
-        <input type="text" name="name" >
+        <input type="text" name="name">
         <br> Image URL:<br>
-        <input type="text" name="url">
+        <input type="file" name="url">
         <br><br>
         <input type="submit" value="Submit">
     </form>
-    
+
     <a href="/error">error</a>
     <a href="/images"></a>
     <a href="/">home</a>

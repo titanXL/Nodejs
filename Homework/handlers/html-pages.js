@@ -1,7 +1,7 @@
 let fs = require('fs')
 let url = require('url')
 let path = require('path')
-let formidable = require('formidable')
+let multiparty = require('multiparty')
 let userInput = require('../content/utils/user-input.js')
 let buildHtml = require('../content/utils/build-html.js')
 let buildDetails = require('../content/utils/build-details.js')
@@ -10,7 +10,6 @@ module.exports = (req, res) => {
   var contentType = 'text/html'
   let reqId = req.pathname.split('/')[3]
   req.pathname = req.pathname || url.parse(req.url).pathname
-  console.log(req.headers)
   if (req.headers.statusheader === 'Full') {
     if (req.pathname === '/status') {
       if (req.method === 'GET') {
@@ -59,24 +58,29 @@ module.exports = (req, res) => {
         res.end()
       })
     } else if (req.method === 'POST') {
-      let form = new formidable.IncomingForm()
-      form.parse(req, (err, fields, file) => {
-        if (err) console.log(err)
-        res.writeHead(302, {
-          'Location': '../content/images.html'
-        })
-        if (fields.name === '' || fields.url === '') {
-          res.write('ERROR')
+      let form = new multiparty.Form()
+      form.parse(req)
+      form.on('part', (part) => {
+        if (part.filename) {
+          if (!fs.exists(path.join(__dirname, '../content/' + part.filename.split('.')[0]))) {
+            fs.mkdir(path.join(__dirname, '../content/' + part.filename.split('.')[0]))
+          }
+          let directory = path.join(__dirname, '../content/' + part.filename.split('.')[0])
+          console.log(directory)
+          let file = []
+          part.setEncoding('binary')
+          part.on('data', (data) => { file.push(data) })
+          part.on('end', () => {
+            let destination = directory + '/' + part.filename
+            fs.writeFile(destination, file, 'ascii', (err) => {
+              if (err) console.log(err)
+              res.writeHead(200)
+              res.write(part.filename)
+              res.end()
+            }) })
         } else {
-          let obj = {}
-          obj.name = fields.name
-          obj.url = fields.url
-          obj.id = new Date().valueOf()
-          obj.details = '/images/details/' + obj.id
-          userInput.push(obj)
+          part.resume()
         }
-        console.log(userInput)
-        res.end()
       })
     }
   } else if (req.pathname === '/images/details/' + reqId) {
