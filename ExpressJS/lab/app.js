@@ -9,6 +9,7 @@ let expressValidator = require('express-validator')
 var routes = require('./routes/index')
 let create = require('./routes/create')
 let details = require('./routes/details')
+let stats = require('./routes/stats')
 
 let all = require('./routes/all')
 var app = express()
@@ -30,6 +31,7 @@ app.use('/', routes)
 app.use('/create', create)
 app.use('/all', all)
 app.use('/details', details)
+app.use('/stats', stats)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found')

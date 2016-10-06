@@ -14,7 +14,8 @@ router.post('/', (req, res, next) => {
     id: id,
     title: title,
     description: description,
-    status: 'Pending'
+    status: 'Pending',
+    comments: []
   }
   todoList.push(todo)
   todoList.sort((a, b) => {

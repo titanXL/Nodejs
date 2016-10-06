@@ -2,5 +2,31 @@ extends Layout
 
 block content
   
-  h1 TEST
-    
+  h1= title
+    p= description
+
+  button.btn-default#clickable(onclick='changeStatus()') #{status}
+  
+  form(method='post', action='/details/'+id+'/comment')
+    .form-group
+      Label Comment
+      textarea(name='comment', placeholder='Comment...')
+    input.btn.btn-default(name='button', type='submit', value='add-comment')
+
+  script.
+    let page = window.location.pathname
+    let id = page.split('/')[2]
+   
+    let changeStatus=()=>{
+        $.ajax({
+          url:'/details',
+          type : 'PUT',
+          data : {
+            id: id
+          },
+          dataType:'json',
+          success:function(){
+            alert(page)
+          }
+        })
+    }
