@@ -13,4 +13,26 @@ block content
     .form-group
       h4 Description <br />
       textarea(name='description', placeholder='Enter Description')  
+    .form-group
+      h4 Avatar <br />
+      input.form-control(name='avatar',type ='file' placeholder='avatar', id='avatar')    
     input.btn.btn-default(name='submit', type='submit', value='Add')  
+
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')   
+  script.
+    $('#avatar').change((e)=>{
+      let file = e.target.files[0]
+      let form = new FormData()
+      form.append('avatar', file)
+      $.ajax({
+        url:'/create',
+          type : 'post',
+          data : form,
+          processData : false,
+          contentType : false,
+          success: function(){
+
+          },
+          crossDomain : true
+      })
+    })

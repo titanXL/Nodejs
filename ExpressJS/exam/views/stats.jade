@@ -1,0 +1,16 @@
+extends Layout
+
+block content
+  h1 Articles
+    ul.list-group.articles
+    each article, i in articles
+      li.list-group
+        a(href='details/#{article.id}') #{article.title}
+  h1 DELETED Articles
+    ul.list-group.deleted
+    each deletedArt, i in deleted
+      li.list-group
+        a(href='details/#{deletedArt.id}') #{deletedArt.title}
+  h2 Views
+    p= views      
+      

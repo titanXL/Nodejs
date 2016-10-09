@@ -1,0 +1,38 @@
+extends Layout
+
+block content
+  h1 Create ARTICLE
+  ul.errors
+    if errors
+      each error, i in errors
+        li.alert.alert-danger #{error.msg}
+  form(method='post', action='/create', enctype='multipart/form-data')
+    .form-group
+      Label Title
+      input.form-control(name='title', type='text', placeholder='Enter title')
+    .form-group
+      h4 Description <br />
+      input.form-control(name='description',type='text', placeholder='Enter Description')  
+    .form-group
+      h4 Picture <br />
+      input.form-control(name='picture',type ='file' placeholder='avatar', id='picture')    
+    input.btn.btn-default(name='submit', type='submit', value='Add')  
+
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js')   
+  script.
+    $('#avatar').change((e)=>{
+      let file = e.target.files[0]
+      let form = new FormData()
+      form.append('avatar', file)
+      $.ajax({
+        url:'/create',
+          type : 'post',
+          data : form,
+          processData : false,
+          contentType : false,
+          success: function(){
+
+          },
+          crossDomain : true
+      })
+    })

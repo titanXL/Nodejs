@@ -1,0 +1,8 @@
+extends Layout
+
+block content
+  
+  ul.list-group.articles
+    each article, i in articles
+      li.list-group
+        a(href='details/#{article.id}') #{article.title}

@@ -1,0 +1,44 @@
+extends Layout
+
+block content
+
+  h1= title
+    p= description
+    img(src='/images/#{image}')
+  ul.errors
+    if errors
+      each error, i in errors
+        li.alert.alert-danger #{error.msg}
+  button.btn-default#clickable(onclick='changeStatus()') #{status}
+  
+  form(method='post', action='/details/'+id+'/comment')
+    .form-group
+      Label Comment
+      input.form-control(name='comment',type='text', placeholder='Comment...')
+    .form-group
+      Label Username
+      input.form-control(name='username', type='text', placeholder='Enter username') 
+    input.btn.btn-default(name='button', type='submit', value='add-comment')
+  h1 COMMENTS
+  ul.comments
+    each comment,i in comments
+      li.alert.alert-success #{comment.text}
+  h2 VIEWS
+    p viewd: #{views}    
+  script.
+    let page = window.location.pathname
+    let id = page.split('/')[2]
+   
+    let changeStatus=()=>{
+        $.ajax({
+          url:'/details',
+          type : 'PUT',
+          data : {
+            id: id
+          },
+          dataType:'json',
+          success:function(){
+            alert(page)
+          }
+        })
+    }
